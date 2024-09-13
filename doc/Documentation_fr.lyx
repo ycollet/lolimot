@@ -1,0 +1,3223 @@
+#LyX 1.4.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 245
+\begin_document
+\begin_header
+\textclass article
+\begin_preamble
+\usepackage{a4wide}
+\date{}
+\end_preamble
+\language english
+\inputencoding auto
+\fontscheme times
+\graphics default
+\paperfontsize default
+\spacing single
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\cite_engine basic
+\use_bibtopic false
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes true
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Apprentissage de réseaux LOLIMOT
+\end_layout
+
+\begin_layout Author
+Y.
+ Collette
+\end_layout
+
+\begin_layout Section
+Introduction
+\end_layout
+
+\begin_layout Standard
+Le modèle Lolimot permet de modéliser une relation entrée / sortie un peu
+ à la manière d'un réseau de neurones.
+\end_layout
+
+\begin_layout Standard
+La description mathématique du réseau Lolimot est la suivante:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{equation}
+f^{estim}\left(\overrightarrow{x}\right)=\sum_{i=1}^{N_{p}}\Phi_{i}\left(\overrightarrow{x}\right)\cdot L_{i}\left(\overrightarrow{x}\right)\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+où 
+\begin_inset Formula $\Phi_{i}\left(\overrightarrow{x}\right)$
+\end_inset
+
+ correspond à la fonction d'appartenance 
+\begin_inset Formula $i$
+\end_inset
+
+ (voir sur la figure\InsetSpace ~
+
+\begin_inset LatexCommand \ref{Figure: Description générale}
+
+\end_inset
+
+-b) du modèle linéaire 
+\begin_inset Formula $L_{i}\left(\overrightarrow{x}\right)$
+\end_inset
+
+ (voir sur la figure\InsetSpace ~
+
+\begin_inset LatexCommand \ref{Figure: Description générale}
+
+\end_inset
+
+-a).
+ 
+\begin_inset Formula $N_{p}$
+\end_inset
+
+ correspond au nombre de découpage que l'on effectue dans le domaine de
+ définition de la relation entrée / sortie à approximer, 
+\begin_inset Formula $N_{D}$
+\end_inset
+
+ correspond au nombre d'entrées.
+ 
+\begin_inset Formula $x_{j}^{i^{centre}}$
+\end_inset
+
+ correspond à la coordonnée 
+\begin_inset Formula $j$
+\end_inset
+
+ du centre de la partition 
+\begin_inset Formula $i$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+La fonction d'appartenance correspond en général à une distribution gaussienne:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{equation}
+\Phi_{i}\left(\overrightarrow{x}\right)=\exp\left(-\frac{1}{2}\cdot\left(\sum\limits _{j=1}^{N_{D}}\left(\frac{x_{j}-x_{j}^{i^{centre}}}{\sigma}\right)^{2}\right)\right)\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Pour le cas particulier d'un modèle à 2 entrées (
+\begin_inset Formula $x_{1}$
+\end_inset
+
+ et 
+\begin_inset Formula $x_{2}$
+\end_inset
+
+), le modèle linéaire a pour expression:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{equation}
+L_{i}\left(\overrightarrow{x}\right)=a_{i}+b_{i}\cdot x_{1}+c_{i}\cdot x_{2}\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+L'expression complète du modèle Lolimot est alors la suivante:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{equation}
+f^{estim}\left(\overrightarrow{x}\right)=\frac{\sum\limits _{i=1}^{N_{p}}\left(\sum\limits _{j=0}^{N_{D}}a_{i}\cdot x_{i}\right)\cdot\exp\left(-\frac{1}{2}\cdot\left(\sum\limits _{j=1}^{N_{D}}\left(\frac{x_{j}-x_{j}^{i^{centre}}}{\sigma}\right)^{2}\right)\right)}{\sum\limits _{i=1}^{N_{p}}\exp\left(-\frac{1}{2}\cdot\left(\sum\limits _{j=1}^{N_{D}}\left(\frac{x_{j}-x_{j}^{i^{centre}}}{\sigma}\right)^{2}\right)\right)}\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+On suppose ici que 
+\begin_inset Formula $x_{0}=1$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Standard
+
+\hfill
+
+\begin_inset Graphics
+	filename Figures/lolimot/Slide1_1.eps
+	lyxscale 50
+	width 50col%
+	subcaption
+	subcaptionText "Les modèles linéaires"
+
+\end_inset
+
+
+\hfill
+
+\begin_inset Graphics
+	filename Figures/lolimot/Slide1_2.eps
+	lyxscale 50
+	width 50col%
+	subcaption
+	subcaptionText "Les fonctions d'appartenance"
+
+\end_inset
+
+
+\hfill
+
+\end_layout
+
+\begin_layout Standard
+
+\hfill
+
+\begin_inset Graphics
+	filename Figures/lolimot/Slide1_3.eps
+	lyxscale 50
+	width 50col%
+	subcaption
+	subcaptionText "La fonction approximée"
+
+\end_inset
+
+
+\hfill
+
+\end_layout
+
+\begin_layout Caption
+Description générale.
+ 
+\begin_inset LatexCommand \label{Figure: Description générale}
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Traitons maintenant un exemple simple d'approximation d'une relation entrée
+ / sortie:
+\end_layout
+
+\begin_layout Itemize
+Première itération:
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+On approxime la relation entrée / sortie par un plan (voir sur la figure\InsetSpace ~
+
+\begin_inset LatexCommand \ref{Figure: La première itération}
+
+\end_inset
+
+-b).
+ Les paramètres de ce plan sont déterminés à l'aide d'une méthode de régression
+ linéaire (via la méthode SVD - Singular Value Decomposition par exemple).
+ Ensuite, on calcule la différence entre les valeurs utilisées pour le calcul
+ de la régression et les valeurs générées par ce simple modèle linéaire.
+ On obtient le résidu (voir sur la figure\InsetSpace ~
+
+\begin_inset LatexCommand \ref{Figure: La première itération}
+
+\end_inset
+
+-c).
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Standard
+
+\hfill
+
+\begin_inset Graphics
+	filename Figures/lolimot/Slide2_1.eps
+	lyxscale 50
+	width 50col%
+	subcaption
+	subcaptionText "Les données à approximer."
+
+\end_inset
+
+
+\hfill
+
+\begin_inset Graphics
+	filename Figures/lolimot/Slide2_2.eps
+	lyxscale 50
+	width 50col%
+	subcaption
+	subcaptionText "La fonction obtenue."
+
+\end_inset
+
+
+\hfill
+
+\end_layout
+
+\begin_layout Standard
+
+\hfill
+
+\begin_inset Graphics
+	filename Figures/lolimot/Slide2_3.eps
+	lyxscale 50
+	width 50col%
+	subcaption
+	subcaptionText "Les différences entre les données et l'approximation."
+
+\end_inset
+
+
+\hfill
+
+\end_layout
+
+\begin_layout Caption
+La première itération.
+ 
+\begin_inset LatexCommand \label{Figure: La première itération}
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Seconde itération:
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+On découpe l'espace de définition des entrées en deux (ou plus) suivant
+ chaque dimension.
+ Pour chaque partition de l'espace de définition, on calcule un modèle linéaire
+ (voir sur la figure\InsetSpace ~
+
+\begin_inset LatexCommand \ref{Figure: La seconde itération}
+
+\end_inset
+
+-b).
+ Ensuite on calcule le résidu du modèle complet pour chaque essai de partitionne
+ment que l'on teste (voir sur la figure\InsetSpace ~
+
+\begin_inset LatexCommand \ref{Figure: La seconde itération}
+
+\end_inset
+
+-c).
+\end_layout
+
+\begin_layout Standard
+On retient le partitionnement qui permet de réduire le plus le niveau du
+ résidu.
+ Dans le cas de l'exemple de la figure , on a retenu le découpage horizontal.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Standard
+
+\hfill
+
+\begin_inset Graphics
+	filename Figures/lolimot/Slide3_1.eps
+	lyxscale 50
+	width 50col%
+	subcaption
+	subcaptionText "Les données à approximer."
+
+\end_inset
+
+
+\hfill
+
+\begin_inset Graphics
+	filename Figures/lolimot/Slide3_2.eps
+	lyxscale 50
+	width 50col%
+	subcaption
+	subcaptionText "La fonction obtenue."
+
+\end_inset
+
+
+\hfill
+
+\end_layout
+
+\begin_layout Standard
+
+\hfill
+
+\begin_inset Graphics
+	filename Figures/lolimot/Slide3_3.eps
+	lyxscale 50
+	width 50col%
+	subcaption
+	subcaptionText "Les différences entre les données et l'approximation."
+
+\end_inset
+
+
+\hfill
+
+\end_layout
+
+\begin_layout Caption
+La seconde itération.
+ 
+\begin_inset LatexCommand \label{Figure: La seconde itération}
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Dernière itération:
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+On calcule maintenant les résidus pour chaque partition.
+ On retient la partition qui a le plus grand résidu.
+ On va découper cette partition en deux parties (ou plus) et déterminer
+ un modèle linéaire pour chaque partition.
+ On retiendra le découpage qui permet de réduire le plus le niveau du résidu.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Standard
+
+\hfill
+
+\begin_inset Graphics
+	filename Figures/lolimot/Slide4_1.eps
+	lyxscale 50
+	width 50col%
+	subcaption
+	subcaptionText "Les données à approximer."
+
+\end_inset
+
+
+\hfill
+
+\begin_inset Graphics
+	filename Figures/lolimot/Slide4_2.eps
+	lyxscale 50
+	width 50col%
+	subcaption
+	subcaptionText "La fonction obtenue."
+
+\end_inset
+
+
+\hfill
+
+\end_layout
+
+\begin_layout Standard
+
+\hfill
+
+\begin_inset Graphics
+	filename Figures/lolimot/Slide4_3.eps
+	lyxscale 50
+	width 50col%
+	subcaption
+	subcaptionText "Les différences entre les données et l'approximation."
+
+\end_inset
+
+
+\hfill
+
+\end_layout
+
+\begin_layout Caption
+La dernière itération.
+ 
+\begin_inset LatexCommand \label{Figure: La dernière itération}
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+L'apprentissage s'arrête quand:
+\end_layout
+
+\begin_layout Itemize
+la réduction relative du résidu d'une itération à l'autre passe sous un
+ seuil défini par l'utilisateur;
+\end_layout
+
+\begin_layout Itemize
+une nombre maximum de partition a été atteint.
+\end_layout
+
+\begin_layout Standard
+Les bonnes propriétées que l'on peut associer au modèle Lolimot:
+\end_layout
+
+\begin_layout Itemize
+Apprentissage rapide (d'ou son appellation: Réseau de Neurones Rapides);
+\end_layout
+
+\begin_layout Itemize
+Le modèle apprend de façon 
+\begin_inset Quotes eld
+\end_inset
+
+automatique
+\begin_inset Quotes erd
+\end_inset
+
+ la complexité des données (pas d'hypothèse nécessaire comme avec les polynômes
+ - pas de structure à définir à priori comme avec les réseaux de neurones);
+\end_layout
+
+\begin_layout Itemize
+Bonne propriétés de stabilité quand le nombre des données diminue.
+\end_layout
+
+\begin_layout Section
+La génération des dérivées partielles
+\end_layout
+
+\begin_layout Standard
+Un des avantages du modèle Lolimot est que l'expression analytique des données
+ approximées reste relativement simple.
+ En tout cas, suffisamment simple pour que l'on puisse extraire de cette
+ expression l'expression analytique de la dérivée partielle.
+\end_layout
+
+\begin_layout Standard
+On pose
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{equation}
+E_{i}\left(\overrightarrow{x}\right)=\exp\left(-\frac{1}{2}\cdot\left(\sum\limits _{j=1}^{N_{D}}\left(\frac{x_{j}-x_{j}^{i^{centre}}}{\sigma_{j}^{i}}\right)^{2}\right)\right)\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{equation}
+L_{i}\left(\overrightarrow{x}\right)=a_{0}+\sum_{j=}a_{j}^{i}\cdot x_{j}\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+On part de l'expression suivante:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{equation}
+f^{estim}\left(\overrightarrow{x}\right)=\frac{\sum\limits _{i=1}^{N_{p}}L_{i}\left(\overrightarrow{x}\right)\cdot E_{i}\left(\overrightarrow{x}\right)}{\sum\limits _{i=1}^{N_{p}}E_{i}\left(\overrightarrow{x}\right)}=\frac{u\left(\overrightarrow{x}\right)}{v\left(\overrightarrow{x}\right)}\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+avec:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{equation}
+u\left(\overrightarrow{x}\right)=\sum\limits _{i=1}^{N_{p}}L_{i}\left(\overrightarrow{x}\right)\cdot E_{i}\left(\overrightarrow{x}\right)\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+et:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{equation}
+v\left(\overrightarrow{x}\right)=\sum\limits _{i=1}^{N_{p}}E_{i}\left(\overrightarrow{x}\right)\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+L'expression de la dérivée partielle de 
+\begin_inset Formula $f^{estim}\left(\overrightarrow{x}\right)$
+\end_inset
+
+ par rapport à la variable 
+\begin_inset Formula $x_{i}$
+\end_inset
+
+ s'exprime de la façon suivante:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{equation}
+\frac{\partial f^{estim}\left(\overrightarrow{x}\right)}{\partial x_{k}}=\frac{\frac{\partial v\left(\overrightarrow{x}\right)}{\partial x_{i}}\cdot u\left(\overrightarrow{x}\right)-\frac{\partial y\left(\overrightarrow{x}\right)}{\partial x_{i}}\cdot v\left(\overrightarrow{x}\right)}{v\left(\overrightarrow{x}\right)^{2}}\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Avec:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{equation}
+\frac{\partial v\left(\overrightarrow{x}\right)}{\partial x_{k}}=-2\cdot\sum_{i=1}^{N_{p}}\left(\frac{x_{k}-x_{k}^{i^{centre}}}{\sigma_{k}^{i2}}\right)\cdot E_{i}\left(\overrightarrow{x}\right)\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+et:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{equation}
+\frac{\partial u\left(\overrightarrow{x}\right)}{\partial x_{k}}=\sum_{i=1}^{N_{p}}\left(a_{k}^{i}-2\cdot\left(\frac{x_{k}-x_{k}^{i^{centre}}}{\sigma_{k}^{i2}}\right)\cdot L_{i}\left(\overrightarrow{x}\right)\right)\cdot E_{i}\left(\overrightarrow{x}\right)\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Dans le but d'utiliser le modèle LOLIMOT dans une méthode d'optimisation,
+ nous avons généré aussi les modèles de dérivées partielles secondes:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{eqnarray}
+\frac{\partial^{2}f^{estim}\left(\overrightarrow{x}\right)}{\partial x_{k}\partial x_{m}} & = & \frac{\left(\frac{\partial^{2}u}{\partial x_{k}\partial x_{m}}\cdot v+\frac{\partial u}{\partial x_{k}}\cdot\frac{\partial v}{\partial x_{m}}-\frac{\partial^{2}v}{\partial x_{k}\partial x_{m}}\cdot u-\frac{\partial v}{\partial x_{k}}\cdot\frac{\partial u}{x_{m}}\right)\cdot v{}^{2}}{v^{4}}\\
+ & + & \frac{\left(\frac{\partial u}{\partial x_{k}}\cdot v-\frac{\partial v}{\partial x_{k}}\cdot u\right)\cdot2\cdot v\cdot\frac{\partial v}{\partial x_{m}}}{v^{4}}\end{eqnarray}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Les expressions des dérivées partielles secondes de 
+\begin_inset Formula $u$
+\end_inset
+
+ et 
+\begin_inset Formula $v$
+\end_inset
+
+ sont les suivantes:
+\end_layout
+
+\begin_layout Itemize
+si 
+\begin_inset Formula $k\neq m$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{eqnarray*}
+\frac{\partial^{2}u}{\partial x_{k}\partial x_{m}} & = & -2\cdot\sum_{i=1}^{N_{p}}a_{m}^{i}\cdot\left(\frac{x_{k}-x_{k}^{i^{centre}}}{\sigma_{k}^{i2}}\right)\cdot E_{i}\left(\overrightarrow{x}\right)\\
+ & - & 2\cdot\sum_{i=1}^{N_{p}}a_{k}^{i}\cdot\left(\frac{x_{m}-x_{m}^{i^{centre}}}{\sigma_{m}^{i2}}\right)\cdot E_{i}\left(\overrightarrow{x}\right)\\
+ & + & 4\cdot\sum_{i=1}^{N_{p}}\left(\frac{x_{k}-x_{k}^{i^{centre}}}{\sigma_{k}^{i2}}\right)\cdot\left(\frac{x_{m}-x_{m}^{i^{centre}}}{\sigma_{m}^{i2}}\right)\cdot L_{i}\left(\overrightarrow{x}\right)\cdot E_{i}\left(\overrightarrow{x}\right)\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \[
+\frac{\partial^{2}v}{\partial x_{k}\partial x_{m}}=4\cdot\sum_{i=1}^{N_{p}}\left(\frac{x_{k}-x_{k}^{i^{centre}}}{\sigma_{k}^{i2}}\right)\cdot\left(\frac{x_{m}-x_{m}^{i^{centre}}}{\sigma_{m}^{i2}}\right)\cdot E_{i}\left(\overrightarrow{x}\right)\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+si 
+\begin_inset Formula $k=m$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{eqnarray*}
+\frac{\partial^{2}u}{\partial x_{m}^{2}} & = & -2\cdot\sum_{i=1}^{N_{p}}\frac{L_{i}\left(\overrightarrow{x}\right)}{\sigma_{m}^{i2}}\cdot E_{i}\left(\overrightarrow{x}\right)\\
+ & - & 4\cdot\sum_{i=1}^{N_{p}}a_{m}^{i}\cdot\left(\frac{x_{m}-x_{m}^{i^{centre}}}{\sigma_{m}^{i2}}\right)\cdot E_{i}\left(\overrightarrow{x}\right)\\
+ & + & 4\cdot\sum_{i=1}^{N_{p}}\left(\frac{x_{m}-x_{m}^{i^{centre}}}{\sigma_{m}^{i2}}\right)^{2}\cdot L_{i}\left(\overrightarrow{x}\right)\cdot E_{i}\left(\overrightarrow{x}\right)\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \[
+\frac{\partial^{2}v}{\partial x_{m}^{2}}=-2\cdot\sum_{i=1}^{N_{p}}\left(\frac{1}{\sigma_{m}^{i2}}-2\cdot\left(\frac{x_{m}-x_{m}^{i^{centre}}}{\sigma_{m}^{i2}}\right)^{2}\right)\cdot E_{i}\left(\overrightarrow{x}\right)\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Description des mots clefs
+\end_layout
+
+\begin_layout Subsection
+Introduction
+\end_layout
+
+\begin_layout Standard
+Dans tout ce document, la position d'une colonne dans un fichier de données
+ commence à 0.
+ La première colonne est comptée 0, la seconde 1, etc ...
+\end_layout
+
+\begin_layout Standard
+Concernant les mots clef INPUT, OUTPUT et RETROINPUT, les retards que l'on
+ applique sur une entrée sont comptés à partir de 1.
+ Un retard nul vaut 1, un retard d'un échantillon vaut 2, etc ...
+\end_layout
+
+\begin_layout Subsection
+Le nom du modèle
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+MODELNAME: Nom qui sera donné aux fichiers générés par Lolimot.
+\end_layout
+
+\begin_layout LyX-Code
+MODELNAME ORME_Template
+\end_layout
+
+\begin_layout Subsection
+Les paramètres du modèles Lolimot
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+NBMAXPART: Nombre maximum de partitions générées par Lolimot.
+\end_layout
+
+\begin_layout LyX-Code
+NBMAXPART 30
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+RESGAPPERC: Amélioration relative (en relatif) en dessous de laquelle Lolimot
+ arrête l'apprentissage
+\end_layout
+
+\begin_layout LyX-Code
+RESGAPPERC 0.003
+\end_layout
+
+\begin_layout Standard
+Dans cet exemple, l'apprentissage s'arrêtera quand l'amélioration relative
+ du résidu passera sous la barre des 3%.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+SIGMA: Ecart type de la fonction de lissage
+\end_layout
+
+\begin_layout LyX-Code
+SIGMA 0.3
+\end_layout
+
+\begin_layout Standard
+Ce paramètre permet donc de régler le lissage au niveau du raccordement
+ de deux modèles linéaires.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+NBCUT: Pas de découpage lors de la recherche du découpage d'une partition
+\end_layout
+
+\begin_layout LyX-Code
+NBCUT 3
+\end_layout
+
+\begin_layout Standard
+En règle générale, on choisit de faire entre 2 et 6 découpages par partition.
+\end_layout
+
+\begin_layout Subsection
+Les méthodes de filtrage des données
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+FILTERSTEP: Pas de sous-échantillonnage.
+ On fait un moyennage sur l'ensemble des données sous-échantillonnées.
+\end_layout
+
+\begin_layout LyX-Code
+FILTERSTEP 10
+\end_layout
+
+\begin_layout Standard
+Dans ce cas, on remplacera 10 données consécutives par une moyenne de ces
+ 10 données.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+SELECTSTEP: Pas de sous-échantillonnage.
+ On ne fait pas de moyennage.
+\end_layout
+
+\begin_layout LyX-Code
+SELECTSTEP 10
+\end_layout
+
+\begin_layout Standard
+Dans ce cas, on ne conservera qu'une données sur 10.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+MAVERAGE: On applique une moyenne mobile aux données.
+ Le paramètre correspond à la longueur de la moyenne mobile.
+\end_layout
+
+\begin_layout LyX-Code
+MAVERAGE 10
+\end_layout
+
+\begin_layout Standard
+Dans ce cas, on remplace la donnée 
+\begin_inset Formula $i$
+\end_inset
+
+ par une moyenne intégrant les 10 données précédentes.
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+Pour ces trois mots clefs, l'échantillonnage s'opère avant que les entrées
+ décalées ne soient générées.
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace medskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+ECHANTSTAT: Permet de sélectionner un certain nombre de points à partir
+ de la distribution des valeurs des paramètres.
+ On considère que ces valeurs forment une distribution de probabilité.
+ Cette fonction prend deux paramètres: le nombre de bar utilisées pour détermine
+r la distribution de probabilité (on l'assimile à un histogramme).
+ Le second paramètre correspond aux nombre de points que l'on souhaite échantill
+onner.
+ 
+\end_layout
+
+\begin_layout LyX-Code
+ECHANTSTAT 100 234
+\end_layout
+
+\begin_layout Standard
+ECHANTDYN: Permet de sélectionner un certain nombre de points à partir de
+ la distribution de la dynamique des valeurs des paramètres.
+ On considère que ces valeurs forment une distribution de probabilité.
+ Cette fonction prend deux paramètres: le nombre de bar utilisées pour détermine
+r la distribution de probabilité (on l'assimile à un histogramme).
+ Le second paramètre correspond aux nombre de points que l'on souhaite échantill
+onner.
+ 
+\end_layout
+
+\begin_layout LyX-Code
+ECHANTDYN 100 234
+\end_layout
+
+\begin_layout Standard
+ECHANTSTAT travaille sur le réglage et ECHANTDYN travaille sur la dynamique
+ du réglage et 100 correspond au nombre de barres utilisées dans l'histogramme
+ qui représente la distribution de probabilité.
+\end_layout
+
+\begin_layout Standard
+ECHANTRAND: Sélectionne aléatoirement un certain nombre de points.
+ Ce mot clef prend un paramètre: le nombre de points à échantillonner.
+\end_layout
+
+\begin_layout LyX-Code
+ECHANTRAND 1000
+\end_layout
+
+\begin_layout Standard
+Echantillonne aléatoirement sans doublons 1000 points de la base d'apprentissage.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+ECHANTGREEDY: Sélectionne les N points les plus éloignés entre eux.
+ Ce mot clef prend un paramètre: le nombre de points à échantillonner.
+\end_layout
+
+\begin_layout LyX-Code
+ECHANTGREEDY 1000
+\end_layout
+
+\begin_layout Standard
+Echantillonne via un algorithme glouton 1000 points de la base d'apprentissage.
+\end_layout
+
+\begin_layout Standard
+L'algorithme glouton procède de la façon suivante: on calcule la matrice
+ des distances entre chaque points (cette distance est calculée dans l'espace
+ des paramètres.
+ La mesure n'est pas prise en compte).
+ Ensuite, on cherche dans cette matrice les 2 points les plus proches entre
+ eux.
+ On supprime un des deux points.
+ On répète cette séquence jusqu'à ce qu'il ne reste plus que le nombre de
+ points désiré.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+ECHANTGREEDYADDMEASURE: Sélectionne les N points les plus éloignés entre
+ eux.
+ Ce mot clef prend un paramètre: le nombre de points à échantillonner.
+ La seule différence par rapport à la méthode ECHANTGREEDY est que l'on
+ prend en compte la mesure dans le calcul de la distance entre les points.
+\end_layout
+
+\begin_layout LyX-Code
+ECHANTGREEDYADDMEASURE 1000
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+ECHANTGREEDYFAST: Sélectionne 
+\begin_inset Formula $N_{select}$
+\end_inset
+
+ points et, pour c haque point sélectionné, supprimer les 
+\begin_inset Formula $N_{delete}$
+\end_inset
+
+ points les plus proches.
+ Ce mot clef prend deux paramètres: le nombre de points à échantillonner,
+ le nombre de points à sélectionner.
+ Le calcul de la distance entre deux points ne prend pas en compte la mesure.
+\end_layout
+
+\begin_layout LyX-Code
+ECHANTGREEDYFAST 2000 1000
+\end_layout
+
+\begin_layout Standard
+Echantillonne via un algorithme glouton rapide 2000 points à partir de 1000
+ point sélectionnés.
+ Si il y avait 10000 points dans les données initiales, on sélectionne 1000
+ points et, pour chaque point on supprime les 9 points les plus proches
+ (
+\begin_inset Formula $\left(10000-2000\right)/1000$
+\end_inset
+
+).
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+ECHANTGREEDYFASTADDMEASURE: Sélectionne 
+\begin_inset Formula $N_{select}$
+\end_inset
+
+ points et, pour chaque point sélectionné, supprimer les 
+\begin_inset Formula $N_{delete}$
+\end_inset
+
+ points les plus proches.
+ Ce mot clef prend deux paramètres: le nombre de points à échantillonner,
+ le nombre de points à sélectionner.
+ La différence par rapport à la méthode ECHANTGREEDYFAST est que l'on prend
+ en compte la mesure dans le calcul de la distance entre deux points.
+\end_layout
+
+\begin_layout LyX-Code
+ECHANTGREEDYFAST 2000 1000
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+ECHANTGREEDYPARTIALADDMEASURE: Sélectionne 
+\begin_inset Formula $N_{select}$
+\end_inset
+
+ points en 
+\begin_inset Formula $N_{times}$
+\end_inset
+
+ phases de sélection.
+ Pour cela, si 
+\begin_inset Formula $N$
+\end_inset
+
+ correspond au nombre total de points dans la base de données, on commence
+ par sélectionner 
+\begin_inset Formula $N/N_{times}$
+\end_inset
+
+ points.
+ On applique une sélection glouton sur ces points sélectionnés pour ne retenir
+ que 
+\begin_inset Formula $N_{select}/N_{times}$
+\end_inset
+
+ points.
+ On supprime de la base de données les 
+\begin_inset Formula $N/N_{times}$
+\end_inset
+
+ points sélectionnés et on recommence ce processus avec les points restant,
+ jusqu'à ce qu'il ne reste plus de points dans la base de données.
+\end_layout
+
+\begin_layout LyX-Code
+ECHANTGREEDYPARTIALADDMEASURE 10 1000
+\end_layout
+
+\begin_layout Standard
+Dans cet exemple, on va échantillonner 1000 points en 10 phases de sélection
+ de type ECHANTGREEDY.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+ECHANTGREEDYPARTIALDELTA: La différence entre cette méthode d'échantillonnage
+ et la méthode ECHANTGREEDYPARTIALADDMEASURE est que la distance correspond
+ juste à la différence de valeur de mesure entre deux points.
+ Cette méthode permet de sélectionner des points dans les zones où la mesure
+ varie beaucoup.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+ECHANTGREEDYPARTIALDELTA 10 1000
+\end_layout
+
+\begin_layout Standard
+Dans cet exemple, on va échantillonner 1000 points en 10 phases de sélection
+ de type ECHANTGREEDY.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+ECHANTOUTPUTMIN: Sélectionne 
+\begin_inset Formula $N_{select}$
+\end_inset
+
+ points de plus petite valeur de fonction objectif
+\end_layout
+
+\begin_layout LyX-Code
+ECHANTOUTPUTMIN 1000
+\end_layout
+
+\begin_layout Standard
+Echantillonne les 1000 premiers points des données d'apprentissage lorsque
+ ceux ci sont classés par ordre croissant de valeur de fonction objectif.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+ECHANTOUTPUTMAX: Sélectionne 
+\begin_inset Formula $N_{select}$
+\end_inset
+
+ points de plus grande valeur de fonction objectif
+\end_layout
+
+\begin_layout LyX-Code
+ECHANTOUTPUTMAX 1000
+\end_layout
+
+\begin_layout Standard
+Echantillonne les 1000 derniers points des données d'apprentissage lorsque
+ ceux ci sont classés par ordre croissant de valeur de fonction objectif.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+ECHANTINPUT: Sélectionne tous les points dont la valeur de l'entrée 
+\begin_inset Formula $i$
+\end_inset
+
+ est comprise dans un interval allant de 
+\begin_inset Formula $Min$
+\end_inset
+
+ à 
+\begin_inset Formula $Max$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout LyX-Code
+ECHANTINPUT 10 234 1
+\end_layout
+
+\begin_layout Standard
+Récupère les points dont la valeur de l'entrée 1 est comprise entre 10 et
+ 234.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+ECHANTADDMINMAX: Si ce mot clef est présent, après avoir fait un échantillonnage
+ des données, on ajoute les points correspondant aux bornes min et max de
+ chaque entrée.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+Cette option est valable pour les méthodes d'échantillonnage ECHANTRAND,
+ ECHANTSTAT, ECHANTDYN, ECHANTGREEDY, ECHANTGREEDYFAST, ECHANTKDGREEDY,
+ ECHANTINPUT, ECHANTOUTPUTMIN, ECHANTOUTPUTMAX.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+La séquence d'échantillonnage du programme d'apprentissage est la suivante:
+\end_layout
+
+\begin_layout Enumerate
+Sélection et moyenne (FILTERSTEP).
+\end_layout
+
+\begin_layout Enumerate
+Moyenne mobile (MAVERAGE).
+\end_layout
+
+\begin_layout Enumerate
+Sous échantillonnage (SELECTSTEP).
+\end_layout
+
+\begin_layout Enumerate
+Echantillonnage d'une plage de variation d'une entrée (ECHANTINPUTADD, ECHANTINP
+UTREMOVE).
+\end_layout
+
+\begin_layout Enumerate
+Echantillonnage des plus petites valeurs de la sortie (ECHANTOUTPUTMIN).
+\end_layout
+
+\begin_layout Enumerate
+Echantillonnage des plus grandes valeurs de la sortie (ECHANTOUTPUTMAX).
+\end_layout
+
+\begin_layout Enumerate
+Echantillonnage aléatoire (ECHANTRAND).
+\end_layout
+
+\begin_layout Enumerate
+Echantillonnage suivant la distribution statique des paramètres (ECHANTSTAT).
+\end_layout
+
+\begin_layout Enumerate
+Echantillonnage suivant la distribution dynamique des paramètres (ECHANTDYN).
+\end_layout
+
+\begin_layout Enumerate
+Echantillonnage via un algorithme glouton rapide (ECHANTGREEDYFAST).
+\end_layout
+
+\begin_layout Enumerate
+Echantillonnage via un algorithme glouton rapide (ECHANTGREEDYPARTIAL).
+\end_layout
+
+\begin_layout Enumerate
+Echantillonnage via un algorithme glouton (ECHANTGREEDY).
+\end_layout
+
+\begin_layout Standard
+Les étapes 1 à 3 se font sur les données brutes (avant construction des
+ entrées décalées, si ces entrées doivent être produite par le logiciel).
+\end_layout
+
+\begin_layout Standard
+On peut séquencer plusieurs de ces filtres pour échantillonner les données.
+ Par exemple:
+\end_layout
+
+\begin_layout LyX-Code
+ECHANTRAND 1000
+\end_layout
+
+\begin_layout LyX-Code
+ECHANTGREEDY 500
+\end_layout
+
+\begin_layout Standard
+On commence par sélectionner aléatoirement 1000 points de la base d'apprentissag
+e, puis, on applique la sélection gloutonne sur ces 1000 points pour en
+ sélectionner 500.
+\end_layout
+
+\begin_layout LyX-Code
+ECHANTGREEDY 500
+\end_layout
+
+\begin_layout LyX-Code
+ECHANTRAND 1000
+\end_layout
+
+\begin_layout Standard
+Cette séquence d'échantillonnage effectue la même chose qu'au dessus.
+ L'enchainement des filtres est figé dans le programme d'apprentissage des
+ réseaux Lolimot.
+\end_layout
+
+\begin_layout Standard
+Cependant, il faut faire attention au fait que, si plusieurs méthodes d'échantil
+lonnages sont utilisées de façon séquentielles, des points apparaîtrons
+ plusieurs fois dans le fichier d'apprentissage.
+ Ceci aura pour conséquence de donner un poids plus important à certains
+ points par rapport à d'autres points qui, eux, apparaîtrons moins souvent
+ dans le fichier d'apprentissage.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+USEDELTA: Cette option permet de remplacer les entrées décalées (E(t-1),
+ etc.) par une différence entre l'entrée et l'entrée décalée (E(t-1) - E(t)).
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+USETRANSFORMLOG: Cette option permet d'utiliser une méthode de transformation
+ de la réponse.
+ Elle prend comme premier argument le paramètre d'échelle 
+\begin_inset Formula $\alpha$
+\end_inset
+
+.
+ Ensuite, elle peut prendre un second paramètre (optionnel) 
+\begin_inset Formula $\epsilon$
+\end_inset
+
+ qui correspond à un offset appliqué aux sorties normalisées.
+\end_layout
+
+\begin_layout Standard
+L'expression de la transformée est la suivante (voir sur la figure 
+\begin_inset LatexCommand \ref{Figure: la transformation de reponse}
+
+\end_inset
+
+-a):
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \[
+y=\frac{y-y_{min}}{y_{max}-y_{min}}+\epsilon\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{eqnarray*}
+\textrm{si} & x\leq\alpha & y=\alpha\cdot\left(1+\log\left(\frac{x}{\alpha}\right)\right)\\
+\textrm{sinon} &  & y=x\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+L'expression de la transformée inverse est la suivante (voir sur la figure
+ 
+\begin_inset LatexCommand \ref{Figure: la transformation de reponse}
+
+\end_inset
+
+-b):
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \begin{eqnarray*}
+\textrm{si} & x\leq\alpha & y=\alpha\cdot\exp\left(\frac{x}{\alpha}-1\right)\\
+\textrm{sinon} &  & y=x\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \[
+y=\left(y-\epsilon\right)\cdot\left(y_{max}-y_{min}\right)+y_{min}\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Standard
+
+\hfill
+
+\begin_inset Graphics
+	filename Figures/TransfDirect.eps
+	lyxscale 50
+	width 45col%
+	subcaption
+	subcaptionText "La transformation directe."
+
+\end_inset
+
+
+\hfill
+
+\begin_inset Graphics
+	filename Figures/TransfInverse.eps
+	lyxscale 50
+	width 45col%
+	subcaption
+	subcaptionText "La transformation inverse."
+
+\end_inset
+
+
+\hfill
+
+\end_layout
+
+\begin_layout Caption
+La transformation de réponse.
+ 
+\begin_inset LatexCommand \label{Figure: la transformation de reponse}
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Le principe de la transformation de réponse est le suivant: quand on cherche
+ un modèle pour estimer des sorties positives, on transforme ces sorties
+ positives de façon à ce qu'elle occupe la partie positive et négative du
+ plan.
+ On génère ensuite le modèle puis on applique la transformée inverse.
+\end_layout
+
+\begin_layout Standard
+Cette transformation doit être appliquée à des données dont on a la garantie
+ qu'elles sont positives (le paramètre 
+\begin_inset Formula $\epsilon$
+\end_inset
+
+ permet de se réserver une marge de sécurité de ce point de vue).
+\end_layout
+
+\begin_layout Subsection
+Les noms des fichiers de sauvegarde
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+SETWD: Permet de spécifier un répertoire de travail.
+ Tous les noms de fichiers contenu dans le fichier de configuration seront
+ relatif à ce répertoire de travail.
+\end_layout
+
+\begin_layout LyX-Code
+SETWD /home/work/
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+RESIDUALFILENAME: Permet de spécifier un nom de fichier dans lequel sera
+ stocké la valeur du résidu du modèle après chaque ajout de partition.
+ Cette sauvegarde des résidus ne s'effectue que dans le cas d'un apprentissage
+ BootStrap (BOOTSTRAPLIGHT ou BOOTSTRAPHEAVY)
+\end_layout
+
+\begin_layout LyX-Code
+RESIDUALFILENAME MyResidual.dat
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+R2FILENAME: Nom du fichier dans lequel sera stocké la valeur des R2 par
+ groupe de variables lors d'un calcul de l'influence des variables COMPUTER2.
+\end_layout
+
+\begin_layout LyX-Code
+R2FILENAME MyR2.dat
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+PARTLIST: Nom du fichier dans lequel sera stocké la liste des découpages.
+\end_layout
+
+\begin_layout LyX-Code
+PARTLIST MyPart.dat
+\end_layout
+
+\begin_layout Standard
+Ce fichier pourra être ensuite utilisé via un outil restant à écrire pour
+ générer l'arbre des découpages.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+PRINTDISTRIBOFCUT: Nom du fichier dans lequel sera stocké la distribution
+ des découpages par dimension.
+\end_layout
+
+\begin_layout LyX-Code
+PRINTDISTRIBOFCUT ListOfCut.dat
+\end_layout
+
+\begin_layout Standard
+Cette distribution doit permettre de régler le paramètre NBCUTS.
+ Si on voit que le modèle Lolimot a essayé de placer des découpages plutôt
+ sur les positions 1/4 que sur les positions 1/2, on règlera NBCUT à 4.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+RESULTDIR: Permet de spécifier le nom du répertoire où seront écris les
+ résultats.
+ Par défaut: c'est le répertoire courant.
+\end_layout
+
+\begin_layout LyX-Code
+RESULTDIR /home/travail/Results
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+EXPORTC: Permet de générer le fichier C correspondant au réseau Lolimot
+ que l'on vient d'apprendre.
+\end_layout
+
+\begin_layout LyX-Code
+EXPORTC 
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+EXPORTCPP: Permet de générer le fichier C++ correspondant au réseau Lolimot
+ que l'on vient d'apprendre.
+\end_layout
+
+\begin_layout LyX-Code
+EXPORTCPP
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+EXPORTMATLAB: Permet de générer le fichier Matlab correspondant au réseau
+ Lolimot que l'on vient d'apprendre.
+\end_layout
+
+\begin_layout LyX-Code
+EXPORTMATLAB
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+DEXPORTC: Permet de générer le fichier C correspondant aux réseau Lolimot
+ des dérivées partielles par rapport aux entrées, du réseau Lolimot que
+ l'on vient d'apprendre.
+\end_layout
+
+\begin_layout LyX-Code
+DEXPORTC
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+DEXPORTCPP: Permet de générer le fichier C++ correspondant aux réseau Lolimot
+ des dérivées partielles par rapport aux entrées, du réseau Lolimot que
+ l'on vient d'apprendre.
+\end_layout
+
+\begin_layout LyX-Code
+DEXPORTCPP
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+DEXPORTMATLAB: Permet de générer le fichier Matlab correspondant aux réseau
+ Lolimot des dérivées partielles par rapport aux entrées, du réseau Lolimot
+ que l'on vient d'apprendre.
+\end_layout
+
+\begin_layout LyX-Code
+DEXPORTMATLAB
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+SAVEMODEL: Permet de sauvegarder les paramètres d'un modèle après apprentissage.
+ Cette fonction est à utiliser avec la fonction LOADMODEL.
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+Par exemple, on commence par effectuer un apprentissage sur un jeu de données
+ d'apprentissagep puis on sauvegarde le modèle.
+ Ensuite, on peut compléter l'apprentissage avec un autre jeu de données
+ en rechargeant le modèle avec la commande LOADMODEL.
+\end_layout
+
+\end_deeper
+\begin_layout List
+\labelwidthstring 00.00.0000
+LOADMODEL: Permet de charger des paramètres d'un modèle.
+\end_layout
+
+\begin_layout LyX-Code
+SAVEMODEL TestPb.mod
+\end_layout
+
+\begin_layout LyX-Code
+LOADMODEL TestPb.mod
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+SAVESAMPLEDDATA: Permet de sauvegarder le fichier des données échantillonnées
+ juste avant la phase d'apprentissage.
+ Si le dernier paramètre vaut 1, on s'arrète juste avant le début de la
+ phase d'apprentissage.
+\end_layout
+
+\begin_layout LyX-Code
+SAVESAMPLEDDATA Learning.dat 1
+\end_layout
+
+\begin_layout LyX-Code
+SAVESAMPLEDDATA Learning.dat
+\end_layout
+
+\begin_layout Standard
+La première commande permet de sauvegarder les données d'apprentissage utilisées
+ juste avant le début de l'apprentissage du réseau Lolimot.
+ Une fois cette sauvegarde effectuée, on s'arrète.
+\end_layout
+
+\begin_layout Standard
+La seconde commande permet de sauvegarder les données d'apprentissage utilisées
+ juste avant le début de l'apprentissage du réseau Lolimot.
+ Ensuite, comme le second argument ne vaut pas 1, on continue l'apprentissage.
+\end_layout
+
+\begin_layout Subsection
+Définition des options d'apprentissage
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+USEDISTRIBUTEDCUTTING: Option permettant de déterminer le découpage des
+ partitions de façon à ce que le nombre de points appartenant aux partitions
+ évolue de façon linéaire.
+ Par exemple, on générera des partitions du type 1/3 - 2/3, 1/2 - 1/2, 2/3
+ - 1/3.
+ Si la distribution des paramètres ne permet pas d'obtenir une évolution
+ de la quantité de points correcte sur une dimension, on biaise la position
+ du découpage de façon à obtenir au moins une variation de la quantité de
+ points quand on découpe.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+USEUNIFORMCUTTING: Option permettant de faire un découpage classique des
+ partitions suivant la plage de variation du réglage.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+RESIDUALTYPE: Option permettant de spécifier le type de fonction utilisée
+ pour le calcul du résidu global.
+\end_layout
+
+\begin_deeper
+\begin_layout List
+\labelwidthstring 00.00.0000
+Par\InsetSpace ~
+defaut: 
+\begin_inset Formula $Res=\frac{\left|Mesure-Estim\right|}{N}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+1\InsetSpace ~
+(L1): 
+\begin_inset Formula $Res=\frac{\left(Mesure-Estim\right)^{2}}{N}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+2\InsetSpace ~
+(L1\InsetSpace ~
+relatif): 
+\begin_inset Formula $Res=\left|\frac{Mesure-Estim}{Mesure}\right|\cdot\frac{1}{N}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+3\InsetSpace ~
+(L2): 
+\begin_inset Formula $Res=\sqrt{\frac{\left(Mesure-Estim\right)^{2}}{N}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+4\InsetSpace ~
+(L2\InsetSpace ~
+relatif): 
+\begin_inset Formula $Res=\max\left|Mesure-Estim\right|$
+\end_inset
+
+
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+5\InsetSpace ~
+(Not\InsetSpace ~
+Negative): 
+\begin_inset Formula $Res=\max\left(\min\left(Mesure-Estim\right)^{2}\right)$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Subsection
+Sélection de la méthode d'apprentissage
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+LEARNMETH\InsetSpace ~
+CLASSIC: Option permettant d'effectuer un apprentissage classique
+ du réseau Lolimot sur les données.
+\end_layout
+
+\begin_layout LyX-Code
+LEARNMETH CLASSIC
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+LEARNMETH\InsetSpace ~
+BOOTSTRAPLIGHT: Option permettant d'effectuer un apprentissage
+ du type BootStrap .
+ Dans cette version du BootStrap, on récupère une portion des données d'apprenti
+ssage pour effectuer une phase de validation.
+ Après chaque ajout de partition, on calcule le résidu du modèle avec les
+ données de validation et on ne retient ce nouveau modèle que si celui-ci
+ améliore le résidu du modèle précédemment stocké.
+ Ce mot clef prend deux paramètres: le premier paramètre correspond à la
+ quantité relative des données à extraire des données d'apprentissage pour
+ effectuer la validation et le second paramètre correspond au nombre de
+ découpage maximum à explorer.
+\end_layout
+
+\begin_layout LyX-Code
+LEARNMETH BOOTSTRAPLIGHT 0.20 30
+\end_layout
+
+\begin_layout Standard
+Dans ce cas, on conserve 20% des données pour la validation et les 80% restant
+ serviront à l'apprentissage.
+ On génèrera des modèles ayant jusqu'à 30 partitions.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+LEARNMETH\InsetSpace ~
+RECURSIVE: Option permettant d'effectuer l'apprentissage d'un réseau
+ récurrant.
+ Cette option prend deux paramètres: le nombre d'itérations pendant lesquelles
+ on effectue un apprentissage classique (on utilise les mesures de la sortie
+ pour simuler le bouclage de la sortie sur l'entrée), le nombre d'itérations
+ pendant lesquelles on effectue un apprentissage récurrant (à chaque itération
+ d'apprentissage, on calcule les estimations de la sortie que l'on utilise
+ pour effectuer le rebouclage).
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+Attention, cette méthode d'apprentissage peut ne pas être stable (elle peut
+ générer des réseaux Lolimot divergeant).
+\end_layout
+
+\end_deeper
+\begin_layout LyX-Code
+LEARNMETH RECURSIVE 10 10
+\end_layout
+
+\begin_layout Standard
+Dans ce cas, on fera 10 découpages en utilisant les mesures pour effectuer
+ le rebouclage puis on fera 10 découpages supplémentaires en utilisant les
+ estimations pour faire le découpage.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+LEARNMETH\InsetSpace ~
+UPDATE: Option permettant de réajuster les modèles linéaires d'un
+ modèle récurrant.
+ Cette option prend un paramètre: le nombre d'itérations de mise à jour.
+ Une fois que l'apprentissage a été effectué, on calcule les estimations
+ que l'on utilise ensuite pour recalculer les modèles linéaires de chaque
+ partition.
+ On recommence cette étape le nombre de fois précisé par la valeur du paramètre.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+Attention, cette méthode d'apprentissage peut ne pas être stable (elle peut
+ générer des réseaux Lolimot divergeant).
+\end_layout
+
+\begin_layout Standard
+Cette méthode d'apprentissage s'utilise en conjonction avec une autre méthode
+ d'apprentissage (CLASSIC ou BOOTSTRAP ou RECURSIVE).
+\end_layout
+
+\end_deeper
+\begin_layout LyX-Code
+LEARNMETH CLASSIC 15
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Standard
+A revoir.
+ Ca se fait en deux fois.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+LEARNMETH UPDATE 2
+\end_layout
+
+\begin_layout Standard
+Dans cet exemple, on effectue un premier apprentissage en générant 15 découpages
+ puis, on affine les modèles linéaires en effectuant deux étapes de mise
+ à jour.
+\end_layout
+
+\begin_layout Subsection
+Test et optimisation des paramètres après apprentissage
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+COMPUTER2: Cette méthode permet de calculer le R2 du modèle global ainsi
+ que des modèles comprenant un paramètre en moins.
+ Cette méthode permet d'évaluer l'importance d'une entrée dans le modèle.
+ Les entrées sont regroupées dans des groupes d'appartenance.
+ Lors de ce calcul, on détermine le R2 pour l'ensemble du modèle puis les
+ R2 en supprimant les entrées d'un groupe d'appartenance, et ce, pour chaque
+ groupe d'appartenance, les uns après les autres.
+\end_layout
+
+\begin_layout LyX-Code
+COMPUTER2
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+OPTIMIZESIGMA: Cette méthode permet de régler la valeur du paramètre Sigma
+ à la fin de l'apprentissage.
+ On spécifie une plage de variation possible pour le paramètre Sigma ainsi
+ qu'un pas de variation.
+ On teste ensuite chaque valeur de l'interval de variation et on retient
+ la valeur qui minimise le résidu.
+ Cette méthode prend trois paramètres: la valeur inférieure du paramètre
+ Sigma, le pas de variation du paramètre Sigma et la valeur supérieure du
+ paramètre Sigma.
+\end_layout
+
+\begin_layout LyX-Code
+OPTIMIZESIGMA 0.1 0.01 1.0
+\end_layout
+
+\begin_layout Standard
+Dans ce cas, on testera toutes les valeurs possibles entre 0.1 et 1.0 par
+ pas de 0.01 pour ne retenir que la valeur de Sigma qui minimise le résidu
+ sur cet interval.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+COMPUTEC1: Cette méthode effectue une analyse d'influence.
+ Pour chaque dimension, cette méthode calcule un coefficient expliquant
+ les non linéaritées des réponses à partir des tailles moyennes des partitions
+ suivant les dimensions.
+ Ce calcul est le suivant:
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset Formula \begin{equation}
+C_{1}\left(x_{1}\right)=100\cdot\frac{\left(\sigma_{i}^{-1}-1\right)}{\sum\limits _{j=1}^{N_{p}}\left(\sigma_{j}^{-1}-1\right)}\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+où 
+\begin_inset Formula $\sigma_{i}$
+\end_inset
+
+correspond à la taille moyenne des partitions suivant la dimension 
+\begin_inset Formula $i$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout List
+\labelwidthstring 00.00.0000
+COMPUTEC2: Cette méthode effectue une analyse d'influence.
+ Pour chaque dimension, cette méthode calcule un coefficient expliquant
+ les non linéarités des réponses à partir des coefficients des modèles.
+ Ce calcul est le suivant:
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset Formula \begin{equation}
+C_{2}\left(x_{i}\right)=100\cdot\frac{\bar{a_{i}}}{\sum\limits _{j=1}^{N_{p}}\bar{a_{j}}}\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+où 
+\begin_inset Formula $\bar{a_{i}}$
+\end_inset
+
+ correspond à la valeur moyenne du coefficient des modèles pour la dimension
+ 
+\begin_inset Formula $i$
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout List
+\labelwidthstring 00.00.0000
+LEAVEONEOUT: Cette méthode permet de calculer l'influence d'un point de
+ mesure dans la qualité du modèle.
+ Pour cela, on supprimer un point de la base d'apprentissage puis on met
+ à jour les modèles linéaires du modèle Lolimot.
+ Ensuite, on calcule le résidu.
+ On reprend ce processus en enlevant et en remettant un à un les points
+ de la base d'apprentissage.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+Cette méthode permet, entre autre, de localiser les points sensibles du
+ modèle.
+ Les points pour lesquels il faudrait ajouter des points autour ce de point
+ pour rendre moins sensible l'apprentissage vis-à-vis de ce point.
+\end_layout
+
+\end_deeper
+\begin_layout List
+\labelwidthstring 00.00.0000
+VALIDSTART: Cette méthode permet de commencer la validation à partir de
+ la ligne fournie en paramètre de cette commande.
+\end_layout
+
+\begin_deeper
+\begin_layout LyX-Code
+VALIDSTART 10
+\end_layout
+
+\begin_layout Standard
+Dans cet exemple, on commence la validation à partir de la ligne 10 du fichier
+ de validation.
+\end_layout
+
+\end_deeper
+\begin_layout List
+\labelwidthstring 00.00.0000
+VALIDEND: Cette méthode permet de finir la validation 
+\begin_inset Formula $N$
+\end_inset
+
+ lignes avant la fin du fichier de validation où 
+\begin_inset Formula $N$
+\end_inset
+
+ est le nombre fourni en paramètre de cette commande.
+\end_layout
+
+\begin_deeper
+\begin_layout LyX-Code
+VALIDEND 10
+\end_layout
+
+\begin_layout Standard
+Dans cet exemple, on finit la validation 10 lignes avant la fin du fichier
+ de validation.
+\end_layout
+
+\end_deeper
+\begin_layout List
+\labelwidthstring 00.00.0000
+LEARNSTART: Cette méthode permet de commencer le calcul du 
+\begin_inset Formula $R^{2}$
+\end_inset
+
+ et des autres critères statistiques appliqué au fichier d'apprentissage
+ à partir de la ligne fournie en paramètre de cette commande.
+\end_layout
+
+\begin_deeper
+\begin_layout LyX-Code
+LEARNSTART 10
+\end_layout
+
+\begin_layout Standard
+Dans cet exemple, on commence le calcul du 
+\begin_inset Formula $R^{2}$
+\end_inset
+
+ et des autres critères statistiques à partir de la ligne 10 du fichier
+ d'apprentissage.
+\end_layout
+
+\end_deeper
+\begin_layout List
+\labelwidthstring 00.00.0000
+LEARNEND: Cette méthode permet de finir le calcul du 
+\begin_inset Formula $R^{2}$
+\end_inset
+
+ et des autres critères statistiques 
+\begin_inset Formula $N$
+\end_inset
+
+ lignes avant la fin du fichier d'apprentissage où 
+\begin_inset Formula $N$
+\end_inset
+
+ est le nombre fourni en paramètre de cette commande.
+\end_layout
+
+\begin_deeper
+\begin_layout LyX-Code
+LEARNEND 10
+\end_layout
+
+\begin_layout Standard
+Dans cet exemple, on finit le calcul du 
+\begin_inset Formula $R^{2}$
+\end_inset
+
+ et des autres critères statistiques 10 lignes avant la fin du fichier d'apprent
+issage.
+\end_layout
+
+\end_deeper
+\begin_layout Subsection
+Description des entrées / sorties
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+TRAIN: Nom du ou des fichiers contenant les données d'apprentissage.
+ Cette méthode prend plusieurs paramètres: NomFich1 NbLignesAPasser1 NomFich2
+ NbLignesAPasser2.
+ Pour chaque nom de fichier, on associe un nombre de ligne à sauter afin
+ d'atteindre les données (si un entête est présent par exemple).
+\end_layout
+
+\begin_layout LyX-Code
+TRAIN Data/X2_part1.dat 0 Data/X2_part2.dat 2
+\end_layout
+
+\begin_layout LyX-Code
+TRAIN Data/X3_part1.dat 0 Data/X3_part2.dat 2
+\end_layout
+
+\begin_layout LyX-Code
+TRAIN Data/X4_part1.dat 0 Data/X4_part2.dat 2
+\end_layout
+
+\begin_layout LyX-Code
+TRAIN Data/X5_part1.dat 0 Data/X5_part2.dat 2
+\end_layout
+
+\begin_layout LyX-Code
+TRAIN Data/X6_part1.dat 0 Data/X6_part2.dat 2
+\end_layout
+
+\begin_layout Standard
+Dans cet exemple, les données d'apprentissage seront constituées de la concaténa
+tion de l'ensemble des fichiers présents en argument de la commande TRAIN.
+ Les colonnes des fichiers situés sur une même ligne d'argument sont fusionnées
+ en un seul et même fichier puis les lignes de l'ensemble des fichiers des
+ commandes TRAIN sont fusionnées ensembles.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+VALID: Nom du ou des fichiers contenant les données de validation.
+ Cette méthode prend plusieurs paramètres: NomFich1 NbLignesAPasser1 NomFich2
+ NbLignesAPasser2.
+ La signification de ces arguments est identique à celle des arguments de
+ la commande TRAIN.
+\end_layout
+
+\begin_layout LyX-Code
+VALID Data/X1_part1.dat 0 Data/X1_part2.dat 0
+\end_layout
+
+\begin_layout LyX-Code
+VALID Data/X7_part1.dat 0 Data/X7_part2.dat 0
+\end_layout
+
+\begin_layout Standard
+A la différence de la commande TRAIN, on ne fusionne que les colonnes des
+ fichiers situés sur la même ligne d'arguments.
+ La validation est ensuite répétées sur l'ensemble des commandes VALID.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+OUTPUT: Précise où se situe une colonne de sortie.
+ Cette commande prend plusieurs arguments: NomSortie PositionSortie Décalage
+ IndexFichier.
+ L'argument PositionSortie démarre à 0 et correspond à la position de la
+ colonne dans laquelle on trouve les données du paramètre dont le nom est
+ défini par l'argument NomSortie.
+ Décalage correspond au décalage temporel à appliquer au paramètre (ce décalage
+ est mesuré en nombre d'échantillons).
+ IndexFichier correspond au numéro du fichier (on peut préciser plusieurs
+ noms de fichier sur la ligne TRAIN ou sur la ligne VALID) dans lequel on
+ trouvera la sortie.
+\end_layout
+
+\begin_layout LyX-Code
+TRAIN Fichier1.txt 0 Fichier2.txt 0
+\end_layout
+
+\begin_layout LyX-Code
+VALID FValid1.txt 0 FValid2.txt 0
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+OUTPUT CO2 1 1 0
+\end_layout
+
+\begin_layout LyX-Code
+OUTPUT HC  2 1 1
+\end_layout
+
+\begin_layout LyX-Code
+OUTPUT CO  3 1 0
+\end_layout
+
+\begin_layout LyX-Code
+OUTPUT NOX 4 1 1
+\end_layout
+
+\begin_layout LyX-Code
+OUTPUT PM  5 1 0
+\end_layout
+
+\begin_layout Standard
+Dans cet exemple, les mesures CO2, CO et PM se trouverons dans le fichiers
+ 0 (index qui correspond au fichier Fichier1.txt) aux colonnes 1 3 et 5,
+ et les mesures HC et NOX se trouverons dans le fichier 1 (index qui correspond
+ au fichier Fichier2.txt) aux colonnes 2 et 4.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+MEASURE: Spécifie la colonne de mesure qui sera prise en compte pour la
+ modélisation.
+ La première ligne OUTPUT est notée 0.
+\end_layout
+
+\begin_layout LyX-Code
+MEASURE 1 % On sélectionne la colonne HC
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+INPUT: Précise où se situe une colonne d'entré.
+ Cette méthode prend plusieurs arguments: NomEntrée PositionEntrée Décalage
+ IndexFichier GroupNb DontCut.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+NomEntrée: nom que l'on donne à cette entrée.
+\end_layout
+
+\begin_layout Standard
+PositionEntrée: démarre à 0 - Position de la colonne de l'entrée.
+\end_layout
+
+\begin_layout Standard
+Décalage: sert à produire une entrée décalée dans le temps de "Décalage"
+ échantillons.
+\end_layout
+
+\begin_layout Standard
+IndexFichier correspond au numéro du fichier (on peut préciser plusieurs
+ noms de fichier sur la ligne TRAIN ou sur la ligne VALID) dans lequel on
+ trouvera la sortie.
+\end_layout
+
+\begin_layout Standard
+GroupNb: groupe auquel appartient l'entrée.
+ C'est pour le calcul du R2.
+ On désactive séquentiellement chacun des groupes (toutes les entrées appartenan
+t au même groupe sont alors désactivées en même temps).
+ Cette argument est facultatif.
+ Par défaut, toutes les entrées appartiennent au même groupe.
+\end_layout
+
+\begin_layout Standard
+DontCut: si DontCut = 1 alors on interdit de faire des découpages suivant
+ cette entrée.
+ Cet argument est facultatif.
+ Par défaut, toutes les entrées sont découpables.
+\end_layout
+
+\end_deeper
+\begin_layout LyX-Code
+TRAIN Fichier1.txt 0
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+INPUT TEMPS   0 1 0 0 1 
+\end_layout
+
+\begin_layout LyX-Code
+INPUT EGR_T_0 6 1 0 1 0
+\end_layout
+
+\begin_layout LyX-Code
+INPUT EGR_T_1 7 1 0 1 0
+\end_layout
+
+\begin_layout LyX-Code
+INPUT EGR_T_2 8 1 0 1 0
+\end_layout
+
+\begin_layout Standard
+Dans cet exemple, l'entrée nommée TEMPS se situe dans la colonne 1 du fichier
+ 0 (index correspondant au nom de fichier Fichier1.txt) et n'est pas décalée
+ (le décalage vaut 1).
+ Cette entrée forme un groupe numéroté 0.
+ On n'autorise pas cette entrée à être découper (DontCut vaut 1).
+\end_layout
+
+\begin_layout Standard
+Les trois autres entrées forment un seul et même groupe.
+ Lors de l'analyse de sensibilité du modèle, ces entrées seront retirées
+ du modèle d'un seul coup.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+RETROINPUT: Précise que l'on a affaire à une sortie rebouclée.
+ Cette méthode prend en entrée les mêmes arguments que la méthode INPUT.
+\end_layout
+
+\begin_layout LyX-Code
+RETROINPUT NOX_INP   4 2 0 0 0
+\end_layout
+
+\begin_layout Standard
+On précise ici que la sortie rebouclée se site en colonne 5 et que le décalage
+ sera de 1 échantillon.
+ On aura donc en entrée 
+\begin_inset Formula $NOX\left(t-1\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Pour les mots clefs INPUT, OUTPUT et RETROINPUT, le décalage minimum est
+ de 1.
+\end_layout
+
+\begin_layout Standard
+Pour INPUT et OUTPUT, un décalage de 1 correspond à 
+\begin_inset Formula $INPUT\left(t\right)$
+\end_inset
+
+ et à 
+\begin_inset Formula $OUTPUT\left(t\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Pour RETROINPUT, un décalage de 2 correspond à 
+\begin_inset Formula $RETROINPUT\left(t-1\right)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+WEIGHT: Précise qu'il y a dans le fichier de données une colonne qui correspond
+ à un poids associée à une mesure.
+ Cela permet de donner une importance plus ou moins grande à une mesure
+ données\i \.{ }
+ Par exemple, plus la mesure est entachées d'incertitude, plus le
+ poids associé à cette mesure est faible.
+ Ce mot clef prend trois arguments: Nom Pos FileNumber.
+ Nom correspondant au nom que l'on souhaite donner à l'entrée, Pos correspondant
+ à la position de la colonne dans le fichier de mesure (0 correspond à la
+ colonne 1 du fichier de mesures) et FileNumber correspondant au numéro
+ de fichier si un fichier de mesures se décompose sur plusieurs fichiers.
+\end_layout
+
+\begin_layout LyX-Code
+WEIGHT POIDS 12 0
+\end_layout
+
+\begin_layout Standard
+On précise ici que la colonne de poids se site en colonne 12 dans le fichier
+ 0 et que cette 
+\begin_inset Quotes eld
+\end_inset
+
+entrée
+\begin_inset Quotes erd
+\end_inset
+
+ portera le nom POIDS.
+ Précisons que ce n'est pas réellement une entrée dans le sens ou elle ne
+ fera pas partie du modèle.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+SKIPLEARN: Précise des plages de données à supprimer dans le fichier d'apprentis
+sage.
+ Les deux paramètres de cette commande sont: l'index de départ de la plage
+ à supprimer, l'index de fin de la plage à supprimer.
+\end_layout
+
+\begin_layout LyX-Code
+SKIPLEARN 10 100
+\end_layout
+
+\begin_layout Standard
+Dans cet exemple, on va supprimer les lignes 10 à 100 inclu du fichier d'apprent
+issage.
+ Attention, lorsque l'on met deux commandes SKIPLEARN l'une à la suite de
+ l'autre, la seconde commande va travailler sur le fichier d'apprentissage
+ duquel on aura supprimer la première plage de variation.
+ Pour bien faire, il faut commencer par supprimer les plages de données
+ situées à la fin du fichier d'apprentissage puis remonter au fur et à mesure.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+SKIPVALID: Précise des plages de données à supprimer dans les fichiers de
+ validation.
+ Les trois paramètres de cette commande sont: le numéro du fichier de validation
+ (0 pour le premier, etc ...), l'index de départ de la plage à supprimer, l'index
+ de fin de la plage à supprimer.
+ Le premier paramètre est optionel.
+\end_layout
+
+\begin_layout LyX-Code
+SKIPVALID 0 10 100
+\end_layout
+
+\begin_layout Standard
+Dans cet exemple, on va supprimer les lignes 10 à 100 inclu du fichier de
+ validation numéro 0.
+ Attention, lorsque l'on met deux commandes SKIPVALID l'une à la suite de
+ l'autre, la seconde commande va travailler sur le fichier de validation
+ duquel on aura supprimer la première plage de variation.
+ Pour bien faire, il faut commencer par supprimer les plages de données
+ situées à la fin du fichier de validation puis remonter au fur et à mesure.
+\end_layout
+
+\begin_layout LyX-Code
+SKIPVALID 10 100
+\end_layout
+
+\begin_layout Standard
+Dans cet exemple, on va supprimer les lignes 10 à 100 inclu du premier fichier
+ de validation.
+\end_layout
+
+\begin_layout Subsection
+Découpage manuel
+\end_layout
+
+\begin_layout Standard
+Il est possible de découper manuellement le domaine d'apprentissage du modèle
+ Lolimot.
+ Pour cela, il faut utiliser le mot clef CUT.
+ Ce découpage manuel peut s'effectuer sur un modèle vierge aussi bien que
+ sur un modèle déjà existant chargé via la commande LOADMODEL.
+\end_layout
+
+\begin_layout LyX-Code
+CUT NameOfPart DimensionNo CutValue LowPartName UpperPartName
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+NameOfPart nom de la partition à découper
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+DimensionNo index de la dimension à découper (l'index des dimensions commence
+ à 0)
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+CutValue où positionner le découpage (cette valeur doit impérativement se
+ situer entre les bornes min et max de la dimension de la partition à découper)
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+LowPartName nom à affecter à la partition à découper dont l'interval suivant
+ la dimension DimensionNo varie entre Min et CutValue
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+UpperPartName nom à affecter à la partition à découper dont l'interval suivant
+ la dimension DimensionNo varie entre CutValue et Max
+\end_layout
+
+\begin_layout Standard
+Lors de l'apprentissage d'un modèle Lolimot, les noms des partitions sont
+ affectés automatiquement.
+ Pour récupérer les noms des partitions, il suffit de charger le modèle
+ via une commande LOADMODEL, puis d'afficher la liste des partitions via
+ la commande PRINTPARTITIONS.
+\end_layout
+
+\begin_layout Standard
+Exemple de découpage manuel:
+\end_layout
+
+\begin_layout LyX-Code
+CUT none          0 1000 PartDim0Low_0 PartDim0Up_0
+\end_layout
+
+\begin_layout LyX-Code
+CUT PartDim0Low_0 0 500  PartDim0Low_1 PartDim0Up_1
+\end_layout
+
+\begin_layout LyX-Code
+CUT PartDim0Up_1  3 3.3  PartDim3Low_0 PartDim3Up_0
+\end_layout
+
+\begin_layout Standard
+Le nom précédent le premier CUT n'est pas important car, comme le modèle
+ est vierge, il n'existe pas encore de partition.
+ Au départ, on va donc créer deux partitions par découpage de la première
+ dimension à la valeur 1000.
+ Ces deux partitions auront pour nom PartDim0Low_0 pour la partie 0-1000
+ si on admet que la valeur minimale de la dimension 0 est 0 et PartDim0Up_0
+ pour la partie 1000-2000 si on admet que la valeur maximale de la dimension
+ 0 est 2000.
+\end_layout
+
+\begin_layout Standard
+Ensuite, on va découper une partition qui existe déjà.
+ Pour cela, il faut indiquer à la commande CUT le nom de la partition que
+ l'on souhaite découper: ici, on souhaite découper la partition PartDim0Low_0.
+\end_layout
+
+\begin_layout Standard
+La suite de cet exemple suit la même logique que ce qui est décrit ci-dessus.
+\end_layout
+
+\begin_layout Standard
+Il est aussi possible de fixer des coefficients d'un modèle pour une partition
+ données.
+ On fixe un coefficient via la commande SETMODELCOEFF.
+ Cette commande prend 3 paramètres:
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+PartName: c'est le nom de la partition
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+noDimension: c'est l'indice de la dimension considérée.
+ -1 correspond au coefficient constant.
+ Les dimensions sont référencées dans l'ordre d'apparition des commandes
+ INPUT contenues dans le fichier de configuration.
+ L'indice 0 correspond au premier INPUT rencontré dans le fichier de configurati
+on.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+Value: c'est la valeur que l'on souhaite donner au coefficient.
+\end_layout
+
+\begin_layout Standard
+Pour mettre à 0 le coefficient 2 de la partition part0101, il faut entrer
+ la commande suivante:
+\end_layout
+
+\begin_layout LyX-Code
+SETMODELCOEFF part0101 2 0
+\end_layout
+
+\begin_layout Standard
+Une fois que ce coefficient est fixé, toute les partitions issues d'un découpage
+ de cette partition possèderons la même particularité.
+ Elles auront les mêmes coefficients fixés.
+\end_layout
+
+\begin_layout Subsection
+Divers
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+DISPLAY: Permet d'afficher les données intermédiaires à l'écran.
+ Par défaut, on n'affiche rien.
+ Si ce mot clef est présent, on affiche les données intermédiaires.
+\end_layout
+
+\begin_layout LyX-Code
+DISPLAY
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+RANDSEED: Permet d'initialiser le générateur aléatoire.
+\end_layout
+
+\begin_layout LyX-Code
+RANDSEED 1436
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+PRINTPARTITIONS: Permet d'afficher la liste des partitions.
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+CUSTOMARGUMENTS: permet de personnaliser la liste des arguments que l'on
+ transmet au modèle exporté en C, C++ ou Matlab.
+\end_layout
+
+\begin_layout LyX-Code
+CUSTOMARGUMENTS, A, B
+\end_layout
+
+\begin_layout Standard
+Va générer un entête de fonction qui a l'allure suivante:
+\end_layout
+
+\begin_layout LyX-Code
+function res = ModelName(x
+\series bold
+, A, B
+\series default
+);
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+CUSTOMRETURNBEFORE: permet de personnaliser le début de l'expression de
+ retour du modèle
+\end_layout
+
+\begin_layout List
+\labelwidthstring 00.00.0000
+CUSTOMRETURNAFTER: permet de personnaliser la fin de l'expression de retour
+ du modèle
+\end_layout
+
+\begin_layout LyX-Code
+CUSTOMRETURNAFTER exp(-
+\end_layout
+
+\begin_layout LyX-Code
+CUSTOMRETURNAFTER )
+\end_layout
+
+\begin_layout Standard
+Va générer une expression de retour qui a l'allure suivante:
+\end_layout
+
+\begin_layout Standard
+res = 
+\series bold
+exp(-
+\series default
+ ((dU*V-dV*U)/(V*V))
+\series bold
+ )
+\series default
+ ;
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout Section
+Exemples
+\end_layout
+
+\begin_layout Subsection
+Modèle 1D
+\end_layout
+
+\begin_layout Standard
+Dans cet exemple, nous avons générer 1000 échantillons de sinusoïde.
+ L'allure des données d'apprentissage est représentée sur la figure 
+\begin_inset LatexCommand \ref{Figure: Sinus - Les données d'apprentissage.}
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename Figures/Sinus_Data.eps
+	lyxscale 50
+	width 50col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Caption
+Les données d'apprentissage.
+ 
+\begin_inset LatexCommand \label{Figure: Sinus - Les données d'apprentissage.}
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Nous utilisons le fichier de configuration suivant pour effectuer l'apprentissag
+e d'un réseau Lolimot.
+\end_layout
+
+\begin_layout LyX-Code
+MODELNAME Sinus
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+NBMAXPART 15
+\end_layout
+
+\begin_layout LyX-Code
+RESGAPPERC 0.0000
+\end_layout
+
+\begin_layout LyX-Code
+SIGMA 0.22
+\end_layout
+
+\begin_layout LyX-Code
+NBCUT 4
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+TRAIN Data/Sinus.dat 0
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+OPTIMIZESIGMA 0.1 0.01 1.0
+\end_layout
+
+\begin_layout LyX-Code
+COMPUTER2
+\end_layout
+
+\begin_layout LyX-Code
+% USEITERATIVEREGRESSION
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+RESIDUALTYPE 3
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+MEASURE 0
+\end_layout
+
+\begin_layout LyX-Code
+OUTPUT Y 1 1 0
+\end_layout
+
+\begin_layout LyX-Code
+INPUT  T 0 1 0 0 0
+\end_layout
+
+\begin_layout Standard
+Les résultats que nous obtenons sont représentés sur la figure 
+\begin_inset LatexCommand \ref{Figure: Sinus - Réseau à 15 partitions}
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Standard
+
+\hfill
+
+\begin_inset Graphics
+	filename Figures/Sinus_Data_Estim_15.eps
+	lyxscale 50
+	width 50col%
+	subcaption
+	subcaptionText "L'approximation de la relation entrée / sortie par le réseau Lolimot."
+
+\end_inset
+
+
+\hfill
+
+\begin_inset Graphics
+	filename Figures/D_0_Sinus_Data_15.eps
+	lyxscale 50
+	width 50col%
+	subcaption
+	subcaptionText "La dérivée telle que donnée par le réseau Lolimot réalisant la fonction dérivée de la relation entrée / sortie."
+
+\end_inset
+
+
+\hfill
+
+\end_layout
+
+\begin_layout Caption
+Les résultats de l'apprentissage d'un réseau Lolimot comprenant 15 partitions.
+ 
+\begin_inset LatexCommand \label{Figure: Sinus - Réseau à 15 partitions}
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Nous allons maintenant apprendre un réseau Lolimot toujours sur les mêmes
+ données, mais en demandant 50 partitions au lieu de 15.
+ Le résultat est représenté sur la figure 
+\begin_inset LatexCommand \ref{Figure: Sinus - Réseau à 50 partitions.}
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Standard
+
+\hfill
+
+\begin_inset Graphics
+	filename Figures/Sinus_Data_Estim.eps
+	lyxscale 50
+	width 50col%
+	subcaption
+	subcaptionText "L'approximation de la relation entrée / sortie par le réseau Lolimot."
+
+\end_inset
+
+
+\hfill
+
+\begin_inset Graphics
+	filename Figures/D_0_Sinus_Data.eps
+	lyxscale 50
+	width 50col%
+	subcaption
+	subcaptionText "La dérivée telle que donnée par le réseau Lolimot réalisant la fonction dérivée de la relation entrée / sortie."
+
+\end_inset
+
+
+\hfill
+
+\end_layout
+
+\begin_layout Caption
+Les résultats de l'apprentissage d'un réseau Lolimot comprenant 50 partitions.
+ 
+\begin_inset LatexCommand \label{Figure: Sinus - Réseau à 50 partitions.}
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+On peut noter une différence entre ces deux modèles: le modèle à 50 partitions
+ améliore la correspondance entre les mesures et l'estimation au début de
+ la sinusoïde.
+\end_layout
+
+\begin_layout Subsection
+Modèle 2D
+\end_layout
+
+\begin_layout Standard
+Dans cet exemple, nous avons générer 10000 échantillons de parabole.
+ L'allure des données d'apprentissage est représentée sur la figure 
+\begin_inset LatexCommand \ref{Figure: Parabole - Les données d'apprentissage.}
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename Figures/Cone_Data.eps
+	lyxscale 50
+	width 50col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Caption
+Les données d'apprentissage pour la parabole.
+ 
+\begin_inset LatexCommand \label{Figure: Parabole - Les données d'apprentissage.}
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Nous utilisons le fichier de configuration suivant pour effectuer l'apprentissag
+e d'un réseau Lolimot.
+\end_layout
+
+\begin_layout LyX-Code
+MODELNAME Test_Cone_woNoise
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+NBMAXPART 10
+\end_layout
+
+\begin_layout LyX-Code
+RESGAPPERC 0.0003
+\end_layout
+
+\begin_layout LyX-Code
+SIGMA 0.22
+\end_layout
+
+\begin_layout LyX-Code
+NBCUT 4
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+LEARNMETH BOOTSTRAPLIGHT 0.20 20
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+TRAIN Data/Cone_woNoise_LL.dat 0
+\end_layout
+
+\begin_layout LyX-Code
+VALID Data/Cone_woNoise_LL.dat 0
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+COMPUTER2
+\end_layout
+
+\begin_layout LyX-Code
+OPTIMIZESIGMA 0.1 0.01 1.0
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+% USEITERATIVEREGRESSION
+\end_layout
+
+\begin_layout LyX-Code
+
+\end_layout
+
+\begin_layout LyX-Code
+MEASURE 0
+\end_layout
+
+\begin_layout LyX-Code
+OUTPUT Y 2 1 0
+\end_layout
+
+\begin_layout LyX-Code
+INPUT X1 0 1 0 0 0
+\end_layout
+
+\begin_layout LyX-Code
+INPUT X2 1 1 0 1 0
+\end_layout
+
+\begin_layout Standard
+Les résultats que nous obtenons sont représentés sur la figure 
+\begin_inset LatexCommand \ref{Figure: Parabole - 10 partitions}
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Standard
+
+\hfill
+
+\begin_inset Graphics
+	filename Figures/Cone_Data_Estim_10.eps
+	lyxscale 50
+	width 50col%
+	subcaption
+	subcaptionText "L'approximation de la relation entrée / sortie par le réseau Lolimot."
+
+\end_inset
+
+
+\hfill
+
+\end_layout
+
+\begin_layout Standard
+
+\hfill
+
+\begin_inset Graphics
+	filename Figures/D_0_Cone_Data_Estim_10.eps
+	lyxscale 50
+	width 50col%
+	subcaption
+	subcaptionText "La dérivée partielle par rapport à la première variable telle qu'obtenue par le réseau Lolimot réalisant la fonction dérivée partielle."
+
+\end_inset
+
+
+\hfill
+
+\begin_inset Graphics
+	filename Figures/D_1_Cone_Data_Estim_10.eps
+	lyxscale 50
+	width 50col%
+	subcaption
+	subcaptionText "La dérivée partielle par rapport à la première variable telle qu'obtenue par le réseau Lolimot réalisant la fonction dérivée partielle."
+
+\end_inset
+
+
+\hfill
+
+\end_layout
+
+\begin_layout Caption
+Les résultats de l'apprentissage d'un réseau Lolimot comprenant 10 partitions.
+ 
+\begin_inset LatexCommand \label{Figure: Parabole - 10 partitions}
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Nous allons maintenant apprendre un réseau Lolimot toujours sur les mêmes
+ données, mais en demandant 20 partitions au lieu de 10.
+ Le résultat est représenté sur la figure 
+\begin_inset LatexCommand \ref{Figure: Parabole - 20 partitions.}
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Standard
+
+\hfill
+
+\begin_inset Graphics
+	filename Figures/Cone_Data_Estim.eps
+	lyxscale 50
+	width 50col%
+	subcaption
+	subcaptionText "L'approximation de la relation entrée / sortie par le réseau Lolimot."
+
+\end_inset
+
+
+\hfill
+
+\end_layout
+
+\begin_layout Standard
+
+\hfill
+
+\begin_inset Graphics
+	filename Figures/D_0_Cone_Data_Estim.eps
+	lyxscale 50
+	width 50col%
+	subcaption
+	subcaptionText "La dérivée partielle par rapport à la première variable telle qu'obtenue par le réseau Lolimot réalisant la fonction dérivée partielle."
+
+\end_inset
+
+
+\hfill
+
+\begin_inset Graphics
+	filename Figures/D_1_Cone_Data_Estim.eps
+	lyxscale 50
+	width 50col%
+	subcaption
+	subcaptionText "La dérivée partielle par rapport à la première variable telle qu'obtenue par le réseau Lolimot réalisant la fonction dérivée partielle."
+
+\end_inset
+
+
+\hfill
+
+\end_layout
+
+\begin_layout Caption
+Les résultats de l'apprentissage d'un réseau Lolimot comprenant 20 partitions.
+ 
+\begin_inset LatexCommand \label{Figure: Parabole - 20 partitions.}
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document
